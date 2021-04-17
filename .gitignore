@@ -1,3 +1,8 @@
+src/duck.ts
+src/fish.ts
+build/duck.js
+build/fish.js
+
 # Logs
 logs
 *.log
@@ -74,3 +79,4 @@ typings/
 
 # FuseBox cache
 .fusebox/
+
