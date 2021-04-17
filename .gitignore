@@ -3,6 +3,8 @@ src/fish.ts
 build/duck.js
 build/fish.js
 
+.idea
+
 # Logs
 logs
 *.log
