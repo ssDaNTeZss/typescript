@@ -23,22 +23,22 @@ export class BinarySearchTree<T> {
         if (!this.root) {
             this.root = NODE;
         } else {
-            this.insertNode(this.root, NODE);
+            this._insertNode(this.root, NODE);
         }
     }
 
-    public insertNode(baseNode: Node<T>, newNode: Node<T>): void {
+    private _insertNode(baseNode: Node<T>, newNode: Node<T>): void {
         if (newNode.data <= baseNode.data) {
             if (!baseNode.left) {
                 baseNode.left = newNode;
             } else {
-                this.insertNode(baseNode.left, newNode);
+                this._insertNode(baseNode.left, newNode);
             }
         } else {
             if (!baseNode.right) {
                 baseNode.right = newNode;
             } else {
-                this.insertNode(baseNode.right, newNode);
+                this._insertNode(baseNode.right, newNode);
             }
         }
     }
@@ -66,5 +66,66 @@ export class BinarySearchTree<T> {
         };
         recursive(this.root);
         return result;
+    }
+
+    public search(node: Node<T> | null, data: T): Node<T> | null {
+        if (!node) {
+            return null;
+        }
+        if (data < node.data) {
+            return this.search(node.left, data);
+        }
+        if (data > node.data) {
+            return this.search(node.right, data);
+        }
+        return node;
+    }
+
+    public removeNode(data: T):  Node<T> | null {
+        return this._remove(this.root, data);
+    }
+
+    private _minNode(node: Node<T> | null): Node<T> | null {
+        if (!node) {
+            return null;
+        }
+        if (!node?.left) {
+            return node;
+        }
+        return this._minNode(node.left);
+    }
+// @ts-ignore
+    private _remove(node: Node<T> | null, data: T): Node<T> | null {
+        if (!node) {
+            return null;
+        }
+        if (data < node.data) {
+            node.left = this._remove(node.left, data);
+            return node;
+        }
+        if (data > node.data) {
+            node.right = this._remove(node.right, data);
+            return node;
+        }
+        if (node.data === data) {
+            if (!node.left && !node.right) {
+                node = null;
+                return node;
+            }
+            if (!node.left) {
+                node = node.right;
+                return node;
+            }
+            if (!node.right) {
+                node = node.left;
+                return node;
+            }
+            const NEW_NODE = this._minNode(node.right);
+            // @ts-ignore
+            node.data = NEW_NODE.data;
+            // @ts-ignore
+            node.right = this._remove(node.right, NEW_NODE.data);
+            return node;
+        }
     }
 }

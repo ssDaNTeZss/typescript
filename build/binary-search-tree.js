@@ -15,16 +15,16 @@ export class BinarySearchTree {
             this.root = NODE;
         }
         else {
-            this.insertNode(this.root, NODE);
+            this._insertNode(this.root, NODE);
         }
     }
-    insertNode(baseNode, newNode) {
+    _insertNode(baseNode, newNode) {
         if (newNode.data <= baseNode.data) {
             if (!baseNode.left) {
                 baseNode.left = newNode;
             }
             else {
-                this.insertNode(baseNode.left, newNode);
+                this._insertNode(baseNode.left, newNode);
             }
         }
         else {
@@ -32,7 +32,7 @@ export class BinarySearchTree {
                 baseNode.right = newNode;
             }
             else {
-                this.insertNode(baseNode.right, newNode);
+                this._insertNode(baseNode.right, newNode);
             }
         }
     }
@@ -59,5 +59,63 @@ export class BinarySearchTree {
         };
         recursive(this.root);
         return result;
+    }
+    search(node, data) {
+        if (!node) {
+            return null;
+        }
+        if (data < node.data) {
+            return this.search(node.left, data);
+        }
+        if (data > node.data) {
+            return this.search(node.right, data);
+        }
+        return node;
+    }
+    removeNode(data) {
+        return this._remove(this.root, data);
+    }
+    _minNode(node) {
+        if (!node) {
+            return null;
+        }
+        if (!(node === null || node === void 0 ? void 0 : node.left)) {
+            return node;
+        }
+        return this._minNode(node.left);
+    }
+    // @ts-ignore
+    _remove(node, data) {
+        if (!node) {
+            return null;
+        }
+        if (data < node.data) {
+            node.left = this._remove(node.left, data);
+            return node;
+        }
+        if (data > node.data) {
+            node.right = this._remove(node.right, data);
+            return node;
+        }
+        if (node.data === data) {
+            if (!node.left && !node.right) {
+                node = null;
+                return node;
+            }
+            if (!node.left) {
+                node = node.right;
+                return node;
+            }
+            if (!node.right) {
+                node = node.left;
+                return node;
+            }
+            const NEW_NODE = this._minNode(node.right);
+            // @ts-ignore
+            node.data = NEW_NODE.data;
+            // @ts-ignore
+            node.right = this._remove(node.right, NEW_NODE.data);
+            return node;
+        }
     }
 }
