@@ -1,33 +1,57 @@
+import { keyInSelect, question } from "readline-sync";
 import { BinarySearchTree } from "./binary-search-tree.js";
 const BST = new BinarySearchTree();
-// BST.insert(11);
-// console.log(BST);
-// BST.insert(7);
-// console.log(BST);
-// BST.insert(9);
-// console.log(BST);
-// BST.insert(15);
-// console.log(BST);
-// BST.insert(6);
-// console.log(BST);
-BST.insert(11);
-BST.insert(7);
-BST.insert(15);
-BST.insert(5);
-BST.insert(9);
-BST.insert(13);
-BST.insert(20);
-BST.insert(3);
-BST.insert(6);
-BST.insert(8);
-BST.insert(10);
-BST.insert(12);
-BST.insert(14);
-BST.insert(18);
-BST.insert(25);
-console.log("infix", BST.traverse("infix"));
-console.log("prefix", BST.traverse("prefix"));
-console.log("postfix", BST.traverse("postfix"));
-console.log("Search", BST.search(BST.root, 9));
-console.log("R", BST.removeNode(15));
-console.log("infix", BST.traverse("infix"));
+actionsMenu();
+function actionsMenu() {
+    const ACTIONS = ["insert(data)", "traverse(type)", "search(data)", "remove(data)"], index = keyInSelect(ACTIONS, "Select an action:");
+    console.log("Ok, " + ACTIONS[index]);
+    switch (ACTIONS[index]) {
+        case "insert(data)":
+            insertMenu();
+            break;
+        case "traverse(type)":
+            traverseMenu();
+            break;
+        case "search(data)":
+            searchMenu();
+            break;
+        case "remove(data)":
+            removeMenu();
+            break;
+    }
+}
+function insertMenu() {
+    const NODE_DATA = question("Enter node values separated by commas ',': ");
+    const ARRAY_OF_NODES_DATA = NODE_DATA.split(",");
+    let val;
+    for (val of ARRAY_OF_NODES_DATA) {
+        BST.insert(val);
+    }
+    console.log("DONE");
+    actionsMenu();
+}
+function traverseMenu() {
+    const TRAVERSE = ["infix", "prefix", "postfix"], TYPE = keyInSelect(TRAVERSE, "Select the type of traverse: ");
+    switch (TRAVERSE[TYPE]) {
+        case "infix":
+            console.log("Infix (in-order) traverse:", BST.traverse("infix"));
+            break;
+        case "prefix":
+            console.log("Prefix (pre-order) traverse:", BST.traverse("prefix"));
+            break;
+        case "postfix":
+            console.log("Postfix (post-order) traverse:", BST.traverse("postfix"));
+            break;
+    }
+    actionsMenu();
+}
+function searchMenu() {
+    const SEARCH_NODE = question("Enter the key you are looking for: ");
+    console.log("Searched node: ", BST.search(BST.root, SEARCH_NODE));
+    actionsMenu();
+}
+function removeMenu() {
+    const REMOVE_NODE = question("Enter the key of the node to be deleted: ");
+    console.log("Remote node: ", BST.removeNode(REMOVE_NODE));
+    actionsMenu();
+}
